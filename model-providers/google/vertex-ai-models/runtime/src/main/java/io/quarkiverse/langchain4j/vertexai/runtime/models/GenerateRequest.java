@@ -10,6 +10,7 @@ import dev.langchain4j.model.anthropic.internal.api.AnthropicTool;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record GenerateRequest(String anthropic_version,
         Integer max_tokens,
+        String system,
         List<Message> messages,
         List<AnthropicTool> tools,
         AnthropicThinking thinking) {

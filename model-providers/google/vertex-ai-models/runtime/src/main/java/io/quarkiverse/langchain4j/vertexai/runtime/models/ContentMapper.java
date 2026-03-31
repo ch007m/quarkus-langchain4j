@@ -33,11 +33,11 @@ public class ContentMapper {
             boolean strict) {
 
         List<GenerateRequest.Message> requestMessages = new ArrayList<>();
+        String systemPrompt = null;
 
         for (ChatMessage message : messages) {
             switch (message.type()) {
-                case SYSTEM -> requestMessages
-                        .add(new GenerateRequest.Message(Role.SYSTEM.name().toLowerCase(), chatMessageToText(message)));
+                case SYSTEM -> systemPrompt = chatMessageToText(message);
                 case USER -> requestMessages
                         .add(new GenerateRequest.Message(Role.USER.name().toLowerCase(), chatMessageToText(message)));
                 case AI -> requestMessages
@@ -53,8 +53,8 @@ public class ContentMapper {
             }
         }
 
-        return new GenerateRequest(ANTHROPIC_VERSION, max_tokens, requestMessages, toTools(toolSpecifications, strict),
-                thinking);
+        return new GenerateRequest(ANTHROPIC_VERSION, max_tokens, systemPrompt, requestMessages,
+                toTools(toolSpecifications, strict), thinking);
     }
 
     public static List<AnthropicTool> toTools(List<ToolSpecification> toolSpecifications, boolean strict) {
